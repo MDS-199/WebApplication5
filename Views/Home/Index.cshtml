@@ -1,0 +1,28 @@
+﻿@model List<Files>
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Содержимое</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model)
+            {
+                <tr>
+                    <td>@file.id</td>
+                    <td>@file.filename</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

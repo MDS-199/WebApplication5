@@ -1,0 +1,38 @@
+﻿@model (List<Files> files, List<Folders> folders, List<FilesExtensions> filesextensions)
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <!--<th>@Model.folders[1].id</th>-->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var folder in Model.folders)
+            {
+                <tr>
+                    <td class="folder">@folder.foldername</td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".folder").click(function () {
+            $(this).next(".subdirectories").toggleClass("hidden");
+            $(this).find(".toggle").each(function () {
+                $(this).next(".subdirectories").toggleClass("hidden");
+            });
+        });
+    });
+</script>
