@@ -19,17 +19,6 @@ namespace WebApplication5.Controllers
 
         public IActionResult Index()
         {
-
-            /*List<FilesExtensions> filesextensions = _context.filesextensions.ToList();
-
-            List<Folders> folders = _context.folders.ToList();
-
-            List<Files> files = _context.files.ToList();
-
-            var dataTuple = (files, folders, filesextensions);
-            return View(dataTuple); */
-
-
             var viewModel = new ExplorerViewModel
             {
                 files = _context.files.ToList(),
@@ -42,6 +31,21 @@ namespace WebApplication5.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult GetFileContent(int id)
+        {
+            // Здесь ваш код для получения содержимого файла из базы данных по id
+            // Например, используйте Entity Framework для доступа к базе данных
+            var file = _context.files.FirstOrDefault(e => e.id == id);
+
+            if (file != null)
+            {
+                string Filecontent = file.filecontent; // Здесь подставьте имя свойства, которое вы хотите получить
+                return Content(Filecontent);
+            }
+
+            return NotFound(); // Если файл с заданным id не найден
+        }
 
 
         public IActionResult Privacy()

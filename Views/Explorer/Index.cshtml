@@ -17,12 +17,22 @@
     </ul>
 </div>
 
+<div id="file-content1">
+
+    <span> Содержимое файла </span>
+
+</div>
+
+<div id="file-content">
+
+    <span> </span>
+
+</div>
 
 
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const folderElements = document.querySelectorAll(".folder");
@@ -40,3 +50,31 @@
         });
     });
 </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fileLinks = document.querySelectorAll(".file");
+        const fileContentContainer = document.getElementById("file-content");
+
+        fileLinks.forEach(function (link) {
+            link.addEventListener("click", function () {
+                const fileId = link.getAttribute("data-fileid");
+
+                // Выполните AJAX-запрос на ваш контроллер для получения содержимого файла
+                fetch("/Explorer/GetFileContent?id=" + fileId)
+                    .then(response => response.text()) // Получите текст ответа
+                    .then(data => {
+                        fileContentContainer.innerHTML = data; // Отобразите содержание файла
+                    })
+                    .catch(error => console.error("Ошибка при загрузке файла: " + error));
+            });
+        });
+    });
+</script>
+
+
+
+
+
+

@@ -41,3 +41,19 @@ li.folder::before {
 .hidden {
     display: none;
 }
+
+#file-content {
+    position: absolute;
+    left: 55%;
+    top: 15%;
+}
+
+#file-content1 {
+    position: absolute;
+    left: 55%;
+    top: 10%;
+}
+
+.file{
+
+}
