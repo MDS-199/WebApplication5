@@ -3,13 +3,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication5.Models
 {
+    public class CombinedDataModel
+    {
+        public ExplorerViewModel ExplorerViewModel { get; set; }
+        public Folders RootFolder { get; set; }
+    }
+
+    public class ExplorerViewModel
+    {
+        public List<Files> files { get; set; }
+        public List<Folders> folders { get; set; }
+        public List<FilesExtensions> fileextensions { get; set; }
+    }
+
     public class Folders
     {
         public int id { get; set; }
 
         [Key]
         public string foldername { get; set; }
-        public string parentfoldername { get; set; }
+        public int parentfolderid { get; set; }
 
     }
 

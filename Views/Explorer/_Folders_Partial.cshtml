@@ -1,0 +1,18 @@
+﻿
+    <ul >
+        <li class="folder">@Model.RootFolder.foldername</li>
+            <div class="folder-content">
+                @foreach (var folder in Model.ExplorerViewModel.folders)
+                {
+                if (folder.parentfolderid == Model.RootFolder.id)
+                    {
+                        <li>
+                            @Html.Partial("_Files_Partial", new CombinedDataModel { ExplorerViewModel = Model.ExplorerViewModel, RootFolder = folder })
+                            @Html.Partial("_Folders_Partial", new CombinedDataModel { ExplorerViewModel = Model.ExplorerViewModel, RootFolder = folder })
+
+                        </li>
+                    }
+                }
+            </div>
+    </ul>
+

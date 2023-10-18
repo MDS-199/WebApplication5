@@ -1,0 +1,11 @@
+﻿<ul>
+    @foreach (var files in Model.ExplorerViewModel.files)
+    {
+        if (files.foldercode == Model.RootFolder.id - 1)
+        {
+            <li>
+                <span title="@files.filedescription">@files.filename</span>
+            </li>
+        }
+    }
+</ul>

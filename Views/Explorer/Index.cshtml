@@ -1,37 +1,41 @@
-﻿@model (List<Files> files, List<Folders> folders, List<FilesExtensions> filesextensions)
+﻿@model ExplorerViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Название</th>
-                <!--<th>@Model.folders[1].id</th>-->
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var folder in Model.folders)
-            {
-                <tr>
-                    <td class="folder">@folder.foldername</td>
-                </tr>
-            }
+<div class="tree">
 
+    <ul>
+        @foreach (var rootFolder in Model.folders.Where(f => f.parentfolderid == 0))
+        {
+            var combinedModel = new { ExplorerViewModel = Model, RootFolder = rootFolder };
 
-        </tbody>
-    </table>
+            <li>
+                @Html.Partial("_Folders_Partial", combinedModel)
+            </li>
+        }
+    </ul>
 </div>
 
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".folder").click(function () {
-            $(this).next(".subdirectories").toggleClass("hidden");
-            $(this).find(".toggle").each(function () {
-                $(this).next(".subdirectories").toggleClass("hidden");
+    document.addEventListener("DOMContentLoaded", function () {
+        const folderElements = document.querySelectorAll(".folder");
+
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                // Находим следующий элемент с классом "folder-content"
+                const contentElement = folderElement.nextElementSibling;
+
+                // Переключаем класс "hidden" этого элемента
+                if (contentElement && contentElement.classList.contains("folder-content")) {
+                    contentElement.classList.toggle("hidden");
+                }
             });
         });
     });

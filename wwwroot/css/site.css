@@ -20,3 +20,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.tree ul {
+    list-style-type: none;
+}
+
+li.folder::before {
+    content: "+ ";
+    cursor: pointer;
+}
+
+.tree .folder.closed::before {
+    content: "- ";
+}
+
+.folder {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}

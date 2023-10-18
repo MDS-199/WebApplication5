@@ -20,14 +20,26 @@ namespace WebApplication5.Controllers
         public IActionResult Index()
         {
 
-            List<FilesExtensions> filesextensions = _context.filesextensions.ToList();
+            /*List<FilesExtensions> filesextensions = _context.filesextensions.ToList();
 
             List<Folders> folders = _context.folders.ToList();
 
             List<Files> files = _context.files.ToList();
 
             var dataTuple = (files, folders, filesextensions);
-            return View(dataTuple);
+            return View(dataTuple); */
+
+
+            var viewModel = new ExplorerViewModel
+            {
+                files = _context.files.ToList(),
+                folders = _context.folders.ToList(),
+                fileextensions = _context.filesextensions.ToList()
+            };
+
+            return View(viewModel);
+
+
         }
 
 
