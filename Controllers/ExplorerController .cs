@@ -34,19 +34,42 @@ namespace WebApplication5.Controllers
         [HttpGet]
         public IActionResult GetFileContent(int id)
         {
-            // Здесь ваш код для получения содержимого файла из базы данных по id
-            // Например, используйте Entity Framework для доступа к базе данных
             var file = _context.files.FirstOrDefault(e => e.id == id);
 
             if (file != null)
             {
-                string Filecontent = file.filecontent; // Здесь подставьте имя свойства, которое вы хотите получить
+                string Filecontent = file.filecontent;
                 return Content(Filecontent);
             }
 
             return NotFound(); // Если файл с заданным id не найден
         }
 
+
+        // Действие для обработки создания папки
+        [HttpPost]
+        public IActionResult CreateFolder(ExplorerViewModel viewModel)
+        {
+            // Получаем имя новой папки из модели
+            string folderName = viewModel.folders[0].foldername;
+
+            // Получаем последний элемент
+            var lastFolder = _context.folders.OrderByDescending(f => f.id).FirstOrDefault();
+
+            // Создаем новую папку
+            var newFolder = new Folders
+            {
+                foldername = folderName,
+                // Устанавливаем свойство id на 1 больше последнего значения
+                id = lastFolder != null ? lastFolder.id + 1 : 1,
+                parentfolderid = 1
+            };
+
+            _context.folders.Add(newFolder);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
 
         public IActionResult Privacy()
         {

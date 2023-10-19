@@ -3,6 +3,29 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="NavPannel">
+    <button class="NavEllement" id="CreateFolder"> Создать папку</button>
+
+
+    <button class="NavEllement"> Удалить папку</button>
+    <button class="NavEllement"> Переименовать папку</button>
+    <button class="NavEllement"> Загрузить файл</button>
+    <button class="NavEllement"> Удалить файл</button>
+    <button class="NavEllement"> Переименовать файл</button>
+    <button class="NavEllement"> Выгрузить файл</button>
+    <button class="NavEllement"> Добавить расширение </button>
+    <button class="NavEllement"> Удалить расширение</button>
+
+    <form class="hidden" id="CreateFolderForm" asp-action="CreateFolder" asp-controller="Explorer" method="post">
+        <div class="form-group">
+            <label asp-for="folders[0].foldername" class="control-label"></label>
+            <input asp-for="folders[0].foldername" class="form-control" />
+            <span asp-validation-for="folders[0].foldername" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать папку</button>
+    </form>
+</div>
+
 <div class="tree">
 
     <ul>
@@ -61,11 +84,11 @@
             link.addEventListener("click", function () {
                 const fileId = link.getAttribute("data-fileid");
 
-                // Выполните AJAX-запрос на ваш контроллер для получения содержимого файла
+
                 fetch("/Explorer/GetFileContent?id=" + fileId)
-                    .then(response => response.text()) // Получите текст ответа
+                    .then(response => response.text()) 
                     .then(data => {
-                        fileContentContainer.innerHTML = data; // Отобразите содержание файла
+                        fileContentContainer.innerHTML = data; 
                     })
                     .catch(error => console.error("Ошибка при загрузке файла: " + error));
             });
@@ -73,7 +96,20 @@
     });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var showFormButton = document.getElementById("CreateFolder");
+        var myForm = document.getElementById("CreateFolderForm");
 
+        showFormButton.addEventListener("click", function () {
+            if (myForm.classList.contains("hidden")) {
+                myForm.classList.remove("hidden");
+            } else {
+                myForm.classList.add("hidden");
+            }
+        });
+    });
+</script>
 
 
 

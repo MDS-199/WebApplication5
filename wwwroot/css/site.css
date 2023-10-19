@@ -42,6 +42,11 @@ li.folder::before {
     display: none;
 }
 
+.tree {
+    width: 50%;
+    display: inline-block;
+}
+
 #file-content {
     position: absolute;
     left: 55%;
@@ -49,11 +54,17 @@ li.folder::before {
 }
 
 #file-content1 {
-    position: absolute;
-    left: 55%;
-    top: 10%;
+    width: 49%;
+    position: relative;
+    vertical-align: top;
+    display: inline-block;
 }
 
-.file{
-
+.NavPannel {
+    width: 100%;
 }
+
+.NavEllement{
+    font-size: 12px;
+}
+
