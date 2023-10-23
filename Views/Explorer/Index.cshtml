@@ -5,9 +5,7 @@
 
 <div class="NavPannel">
     <button class="NavEllement" id="CreateFolder"> Создать папку</button>
-
-
-    <button class="NavEllement"> Удалить папку</button>
+    <button class="NavEllement" id="DeleteFolder"> Удалить папку</button>
     <button class="NavEllement"> Переименовать папку</button>
     <button class="NavEllement"> Загрузить файл</button>
     <button class="NavEllement"> Удалить файл</button>
@@ -18,12 +16,42 @@
 
     <form class="hidden" id="CreateFolderForm" asp-action="CreateFolder" asp-controller="Explorer" method="post">
         <div class="form-group">
-            <label asp-for="folders[0].foldername" class="control-label"></label>
+            <label asp-for="folders[0].foldername" class="control-label">Введите имя папки</label>
             <input asp-for="folders[0].foldername" class="form-control" />
             <span asp-validation-for="folders[0].foldername" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">Создать папку</button>
     </form>
+
+    <form class="hidden" id="DeleteFolderForm" asp-action="DeleteFolder" asp-controller="Explorer" method="post">
+        <div class="form-group">
+            <label asp-for="folders[0].foldername" class="control-label">Необходимо выбрать папку</label>
+            <input asp-for="folders[0].foldername" class="form-control" />
+            <span asp-validation-for="folders[0].foldername" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать папку</button>
+    </form>
+</div>
+
+<!-- Окно подтверждения удаления -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Подтвердите удаление</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить эту папку?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" id="confirmDeleteButton">Удалить</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="tree">
@@ -76,6 +104,7 @@
 
 
 <script>
+    // Переключаем класс "hidden" этого элемента
     document.addEventListener("DOMContentLoaded", function () {
         const fileLinks = document.querySelectorAll(".file");
         const fileContentContainer = document.getElementById("file-content");
@@ -96,6 +125,8 @@
     });
 </script>
 
+
+<!-- Функция создания папки-->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var showFormButton = document.getElementById("CreateFolder");
@@ -111,6 +142,72 @@
     });
 </script>
 
+<!--script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var showFormButton = document.getElementById("DeleteFolder");
+        var myForm = document.getElementById("DeleteFolderForm");
 
+        showFormButton.addEventListener("click", function () {
+            if (myForm.classList.contains("hidden")) {
+                myForm.classList.toggle("hidden");
+            } else {
+                myForm.classList.toggle("hidden");
+            }
+        });
+    });
+</-->
+
+<!-- Функция удаления папки-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+
+        var folderIdToDelete = null;
+
+        // Обработка клика по папке для удаления
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                folderIdToDelete = folderElement.getAttribute("data-folderid");
+
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+
+        // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                folderIdToDelete = button.getAttribute("data-folderid");
+                console.log("folderIdToDelete:", folderIdToDelete);
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (folderIdToDelete) {
+                // Выполнить AJAX-запрос на удаление папки
+                console.log("folderIdToDelete:", folderIdToDelete);
+                $.ajax({
+                    url: "/Explorer/DeleteFolder",
+                    type: "POST", 
+                    data: { id: folderIdToDelete },
+                    success: function (result) {
+
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            }
+        });
+    });
+
+</script>
 
 

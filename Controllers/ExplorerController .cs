@@ -31,6 +31,8 @@ namespace WebApplication5.Controllers
 
         }
 
+
+        //Просмотр содержимого файла
         [HttpGet]
         public IActionResult GetFileContent(int id)
         {
@@ -46,14 +48,14 @@ namespace WebApplication5.Controllers
         }
 
 
-        // Действие для обработки создания папки
+        // Создание папки
         [HttpPost]
         public IActionResult CreateFolder(ExplorerViewModel viewModel)
         {
             // Получаем имя новой папки из модели
             string folderName = viewModel.folders[0].foldername;
 
-            // Получаем последний элемент
+            // Получаем id последней папки
             var lastFolder = _context.folders.OrderByDescending(f => f.id).FirstOrDefault();
 
             // Создаем новую папку
@@ -67,6 +69,15 @@ namespace WebApplication5.Controllers
 
             _context.folders.Add(newFolder);
             _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteFolder(int id)
+        {
+
+            _context.folders.Where(f => f.id == id).ExecuteDelete();
 
             return RedirectToAction("Index");
         }

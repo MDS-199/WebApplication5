@@ -1,6 +1,7 @@
 ﻿
     <ul >
         <li class="folder">@Model.RootFolder.foldername</li>
+        <button class="delete-button" data-folderid="@Model.RootFolder.id">X</button>
             <div class="folder-content">
                 @foreach (var folder in Model.ExplorerViewModel.folders)
                 {
