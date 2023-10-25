@@ -1,5 +1,177 @@
-html {
-  font-size: 14px;
+<button class="delete-button" data-folderid="@Model.RootFolder.id" > X</button > <script >
+document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        var folderIdToDelete = null;
+        // Обработка клика по папке для удаления
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                folderIdToDelete = folderElement.getAttribute("data-folderid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                folderIdToDelete = button.getAttribute("data-folderid");
+                console.log("folderIdToDelete:", folderIdToDelete);
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (folderIdToDelete) {
+                // Выполнить AJAX-запрос на удаление папки
+                console.log("folderIdToDelete:", folderIdToDelete);
+                $.ajax({
+                    url: "/Explorer/DeleteFolder",
+                    type: "POST", 
+                    data: { id: folderIdToDelete },
+                    success: function (result) {
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            }
+        });
+    });
+</script > <script >
+document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        var folderIdToDelete = null;
+        // Обработка клика по папке для удаления
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                folderIdToDelete = folderElement.getAttribute("data-folderid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                folderIdToDelete = button.getAttribute("data-folderid");
+                console.log("folderIdToDelete:", folderIdToDelete);
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (folderIdToDelete) {
+                // Выполнить AJAX-запрос на удаление папки
+                console.log("folderIdToDelete:", folderIdToDelete);
+                $.ajax({
+                    url: "/Explorer/DeleteFolder",
+                    type: "POST", 
+                    data: { id: folderIdToDelete },
+                    success: function (result) {
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            }
+        });
+    });
+</script > <script >
+document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        var folderIdToDelete = null;
+        // Обработка клика по папке для удаления
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                folderIdToDelete = folderElement.getAttribute("data-folderid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                folderIdToDelete = button.getAttribute("data-folderid");
+                console.log("folderIdToDelete:", folderIdToDelete);
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (folderIdToDelete) {
+                // Выполнить AJAX-запрос на удаление папки
+                console.log("folderIdToDelete:", folderIdToDelete);
+                $.ajax({
+                    url: "/Explorer/DeleteFolder",
+                    type: "POST", 
+                    data: { id: folderIdToDelete },
+                    success: function (result) {
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            }
+        });
+    });
+</script > <script >
+document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+        var folderIdToDelete = null;
+        // Обработка клика по папке для удаления
+        folderElements.forEach(function (folderElement) {
+            folderElement.addEventListener("click", function () {
+                folderIdToDelete = folderElement.getAttribute("data-folderid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                folderIdToDelete = button.getAttribute("data-folderid");
+                console.log("folderIdToDelete:", folderIdToDelete);
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (folderIdToDelete) {
+                // Выполнить AJAX-запрос на удаление папки
+                console.log("folderIdToDelete:", folderIdToDelete);
+                $.ajax({
+                    url: "/Explorer/DeleteFolder",
+                    type: "POST", 
+                    data: { id: folderIdToDelete },
+                    success: function (result) {
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            }
+        });
+    });
+</script > html {
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {

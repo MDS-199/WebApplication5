@@ -18,9 +18,8 @@ namespace WebApplication5.Models
 
     public class Folders
     {
-        public int id { get; set; }
-
         [Key]
+        public int id { get; set; }
         public string foldername { get; set; }
         public int parentfolderid { get; set; }
 

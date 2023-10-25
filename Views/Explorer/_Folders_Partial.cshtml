@@ -2,6 +2,15 @@
     <ul >
         <li class="folder">@Model.RootFolder.foldername</li>
         <button class="delete-button" data-folderid="@Model.RootFolder.id">X</button>
+
+        <button class="change-name-button" data-folderid="@Model.RootFolder.id">X</button>
+
+        <!-- Форма переименования папки -->
+        <form asp-action="RenameFolder" asp-controller="Explorer" method="post">
+            <input type="hidden" name="id" data-folderid="@Model.RootFolder.id" value="@Model.RootFolder.id" />
+            <input type="text" name="newName" data-folderid="@Model.RootFolder.id" placeholder="Новое имя папки" />
+            <button type="submit" id="renameButton" data-folderid="@Model.RootFolder.id">Обновить имя папки</button>
+        </form>
             <div class="folder-content">
                 @foreach (var folder in Model.ExplorerViewModel.folders)
                 {

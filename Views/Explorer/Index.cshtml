@@ -23,14 +23,6 @@
         <button type="submit" class="btn btn-primary">Создать папку</button>
     </form>
 
-    <form class="hidden" id="DeleteFolderForm" asp-action="DeleteFolder" asp-controller="Explorer" method="post">
-        <div class="form-group">
-            <label asp-for="folders[0].foldername" class="control-label">Необходимо выбрать папку</label>
-            <input asp-for="folders[0].foldername" class="form-control" />
-            <span asp-validation-for="folders[0].foldername" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Создать папку</button>
-    </form>
 </div>
 
 <!-- Окно подтверждения удаления -->
@@ -53,6 +45,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="tree">
 
@@ -103,6 +97,7 @@
 </script>
 
 
+<!-- Функция для получения содержимого файла -->
 <script>
     // Переключаем класс "hidden" этого элемента
     document.addEventListener("DOMContentLoaded", function () {
@@ -156,26 +151,21 @@
         });
     });
 </-->
-
 <!-- Функция удаления папки-->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var folderElements = document.querySelectorAll(".folder");
         var deleteButtons = document.querySelectorAll(".delete-button");
         var confirmDeleteButton = document.getElementById("confirmDeleteButton");
-
         var folderIdToDelete = null;
-
         // Обработка клика по папке для удаления
         folderElements.forEach(function (folderElement) {
             folderElement.addEventListener("click", function () {
                 folderIdToDelete = folderElement.getAttribute("data-folderid");
-
                 // Открываем модальное окно
                 $('#deleteConfirmationModal').modal('show');
             });
         });
-
         // Обработка клика на кнопке "Удалить папку" и подтверждение удаления
         deleteButtons.forEach(function (button) {
             button.addEventListener("click", function () {
@@ -185,7 +175,6 @@
                 $('#deleteConfirmationModal').modal('show');
             });
         });
-
         // Обработка подтверждения удаления
         confirmDeleteButton.addEventListener("click", function () {
             if (folderIdToDelete) {
@@ -193,10 +182,9 @@
                 console.log("folderIdToDelete:", folderIdToDelete);
                 $.ajax({
                     url: "/Explorer/DeleteFolder",
-                    type: "POST", 
+                    type: "POST",
                     data: { id: folderIdToDelete },
                     success: function (result) {
-
                         location.reload(); // Обновление страницы
                     },
                     error: function (error) {
@@ -207,7 +195,52 @@
             }
         });
     });
-
 </script>
 
+<!-- Функция переименования папки--> 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var folderElements = document.querySelectorAll(".folder");
+        var deleteButtons = document.querySelectorAll(".delete-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteButton");
+
+        var folderIdToDelete = null;
+        var folderIdToRename = null; // Добавляем переменную для хранения идентификатора папки для переименования
+        var renameButton = document.getElementById("renameButton"); // Определяем кнопку "Переименовать папку"
+        console.log("folderIdToRename:", folderIdToRename);
+
+
+        // Обработка клика на кнопке "Переименовать папку"
+        renameButton.addEventListener("click", function () {
+            folderIdToRename = button.getAttribute("data-folderid");
+            alert("folderIdToRename:", folderIdToRename);
+            var newFolderName = prompt("Введите новое имя папки:");
+            if (newFolderName) {
+                // Выполняем AJAX-запрос для переименования папки
+                fetch("/Explorer/RenameFolder", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data{ id: folderIdToRename},
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text(); // Получение ответа от сервера
+                        }
+                        throw new Error("Ошибка при переименовании папки");
+                    })
+                    .then(data => {
+                        // Обработка успешного переименования
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        // Обработка ошибки
+                    });
+            }
+        });
+
+
+    });
+</script>

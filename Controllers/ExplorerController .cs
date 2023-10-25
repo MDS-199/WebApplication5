@@ -7,15 +7,11 @@ namespace WebApplication5.Controllers
 {
     public class ExplorerController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
 
-        private readonly ExplorerDbContext _context = new ExplorerDbContext();
 
-        public ExplorerController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ExplorerDbContext _context = new();
+
 
         public IActionResult Index()
         {
@@ -73,6 +69,7 @@ namespace WebApplication5.Controllers
             return RedirectToAction("Index");
         }
 
+        // Удаление папки
         [HttpPost]
         public IActionResult DeleteFolder(int id)
         {
@@ -80,6 +77,24 @@ namespace WebApplication5.Controllers
             _context.folders.Where(f => f.id == id).ExecuteDelete();
 
             return RedirectToAction("Index");
+        }
+
+        // Переименование папки
+        [HttpPost]
+        public IActionResult RenameFolder(int id, string newName)
+        {
+            var folder = _context.folders.FirstOrDefault(f => f.id == id);
+            if (folder != null)
+            {
+                folder.foldername = newName;
+                _context.SaveChanges(); // Сохраните изменения в базе данных
+                return RedirectToAction("Index"); // Перенаправяет пользователя обратно на страницу списка папок
+            }
+            else
+            {
+                // Если папка с указанным ID не найдена
+                return RedirectToAction("Error"); // Перенаправляет пользователя на страницу с ошибкой
+            }
         }
 
         public IActionResult Privacy()
