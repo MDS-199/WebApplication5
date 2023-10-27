@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.BackendMessages;
 using System.Diagnostics;
 using WebApplication5.Models;
 
@@ -96,6 +97,55 @@ namespace WebApplication5.Controllers
                 return RedirectToAction("Error"); // Перенаправляет пользователя на страницу с ошибкой
             }
         }
+
+
+        [HttpPost]
+        public IActionResult UploadFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                // Обработка случая, когда файл не выбран
+                return RedirectToAction("Index");
+            }
+
+            if (file != null && file.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+
+                {
+                file.CopyTo(memoryStream);
+                var fileName = file.FileName;
+                var fileExtension = Path.GetExtension(fileName);
+
+                // Получаем id последнего файла
+                var lastFile = _context.files.OrderByDescending(f => f.id).FirstOrDefault();
+
+                // Переменная времени для добавления в описание
+                var currentDate = DateTime.Now;
+
+                // Сохранение файла в базу данных:
+                var fileData = new Files
+                    {
+                        id = lastFile != null ? lastFile.id + 1 : 1,
+                        filename = fileName,
+                        filedescription = "Дата добавления: " + currentDate.ToString("dd/MM/yyyy HH:mm:ss"),
+                        filetypecode = Path.GetExtension(fileName),
+                        foldercode = 1,
+                        filecontent = Convert.ToBase64String(memoryStream.ToArray()) // Конвертируем в Base64 строку
+                    };
+
+
+                    _context.files.Add(fileData);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return View("Error");
+        }
+
+
 
         public IActionResult Privacy()
         {
