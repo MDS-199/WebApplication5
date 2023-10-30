@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql.BackendMessages;
 using System.Diagnostics;
+using System.Text;
 using WebApplication5.Models;
 
 namespace WebApplication5.Controllers
@@ -37,8 +38,9 @@ namespace WebApplication5.Controllers
 
             if (file != null)
             {
-                string Filecontent = file.filecontent;
-                return Content(Filecontent);
+                byte[] bytes = Convert.FromBase64String(file.filecontent);
+                string decodedString = Encoding.UTF8.GetString(bytes);
+                return Content(decodedString);
             }
 
             return NotFound(); // Если файл с заданным id не найден
@@ -98,7 +100,7 @@ namespace WebApplication5.Controllers
             }
         }
 
-
+        // Функция загрузки файла
         [HttpPost]
         public IActionResult UploadFile(IFormFile file)
         {
@@ -145,6 +147,13 @@ namespace WebApplication5.Controllers
             return View("Error");
         }
 
+        [HttpPost]
+        public IActionResult DeleteFile(int id)
+        {
+            _context.files.Where(f => f.id == id).ExecuteDelete();
+
+            return RedirectToAction("Index");
+        }
 
 
         public IActionResult Privacy()
