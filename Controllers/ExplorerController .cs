@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql.BackendMessages;
 using System.Diagnostics;
+using System.Net.Mime;
 using System.Text;
 using WebApplication5.Models;
 
@@ -147,6 +148,7 @@ namespace WebApplication5.Controllers
             return View("Error");
         }
 
+        // Функция удаления файла
         [HttpPost]
         public IActionResult DeleteFile(int id)
         {
@@ -155,6 +157,31 @@ namespace WebApplication5.Controllers
             return RedirectToAction("Index");
         }
 
+        // Функция выгрузки файла
+        public IActionResult DownloadFile(int id)
+        {
+            var file = _context.files.FirstOrDefault(f => f.id == id);
+
+            if (file != null)
+            {
+                var contentDisposition = new ContentDisposition
+                {
+                    FileName = file.filename + file.filetypecode,
+                    Inline = false,
+                };
+                Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+                var contentType = "application/octet-stream";
+
+
+                return File(Encoding.UTF8.GetBytes(file.filecontent), contentType, file.filename + file.filetypecode);
+            }
+
+            else
+            {
+                return NotFound(); // Если файл с указанным id не найден
+            }
+        }
 
         public IActionResult Privacy()
         {

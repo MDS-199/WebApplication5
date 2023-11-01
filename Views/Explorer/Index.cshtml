@@ -319,3 +319,44 @@
         });
     });
 </script>
+
+<!-- Функция скачивания файла -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var downloadFileButtons = document.querySelectorAll(".download-file-button");
+
+        downloadFileButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var fileId = button.getAttribute("data-fileid");
+                var fileName = button.getAttribute("data-filename");
+
+                // Fetch API:
+                fetch("/Explorer/DownloadFile?id=" + fileId, {
+                    method: "GET",
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(fileName);
+                            return response.blob(); // Получение содержимого файла в виде Blob
+                        } else {
+                            // Обработка ошибки получения файла.
+                        }
+                    })
+                    .then(blob => {
+                        // Создание ссылки для скачивания файла и автоматический запуск скачивания
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = url;
+                        a.download = fileName; // Имя файла
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        // Обработка ошибки скачивания файла.
+                    });
+            });
+        });
+    });
+</script>
+
