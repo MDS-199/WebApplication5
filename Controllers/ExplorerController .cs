@@ -224,6 +224,55 @@ namespace WebApplication5.Controllers
             }
         }
 
+        // Отображение расширений
+        public IActionResult ShowExtensions()
+        {
+            var viewModel = new ExplorerViewModel
+            {
+                files = _context.files.ToList(),
+                folders = _context.folders.ToList(),
+                fileextensions = _context.filesextensions.ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        // Создание расширения
+        [HttpPost]
+        public IActionResult CreateExtension(ExplorerViewModel viewModel)
+        {
+            // Получаем имя новой папки из модели
+            string extensionName = viewModel.fileextensions[0].filetype;
+
+            // Получаем id последнего расширения
+            var lastExtension = _context.filesextensions.OrderByDescending(f => f.id).FirstOrDefault();
+
+            // Создаем новую папку
+            var newExtension = new FilesExtensions
+            {
+                filetype = extensionName,
+                // Устанавливаем свойство id на 1 больше последнего значения
+                id = lastExtension != null ? lastExtension.id + 1 : 1,
+                fileicon = "1"
+            };
+
+            _context.filesextensions.Add(newExtension);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // Удаление расширения
+        [HttpPost]
+        public IActionResult DeleteExtension(int id)
+        {
+
+            _context.filesextensions.Where(f => f.id == id).ExecuteDelete();
+
+            return RedirectToAction("ShowExtensions");
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

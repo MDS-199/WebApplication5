@@ -1,0 +1,122 @@
+﻿@model ExplorerViewModel
+@{
+    ViewData["Title"] = "Extensions";
+}
+
+<div class="NavPannel">
+    <button class="NavEllement" id="CreateExtension"> Добавить расширение</button>
+
+
+    <form class="hidden" id="CreateExtensionForm" asp-action="CreateExtension" asp-controller="Explorer" method="post">
+        <div class="form-group">
+            <label asp-for="fileextensions[0].filetype" class="control-label">Введите имя расширения</label>
+            <input asp-for="fileextensions[0].filetype" class="form-control" />
+            <span asp-validation-for="fileextensions[0].filetype" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить расширение</button>
+    </form>
+
+</div>
+
+<!-- Окно подтверждения удаления расширения -->
+<div class="modal fade" id="deleteConfirmationModalExtension" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabelExtension">Подтвердите удаление</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить это расширение?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" id="confirmDeleteExtensionButton">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="tree">
+
+    <ul>
+        @foreach (var extension in Model.fileextensions)
+        {
+            <li class="extension">@extension.filetype</li>
+            <button class="delete-extension-button" data-extensionid="@extension.id">X</button>
+
+        }
+    </ul>
+</div>
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+<!-- Функция скрытия формы создания расширения-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var showFormButton = document.getElementById("CreateExtension");
+        var myForm = document.getElementById("CreateExtensionForm");
+
+        showFormButton.addEventListener("click", function () {
+            if (myForm.classList.contains("hidden")) {
+                myForm.classList.remove("hidden");
+            } else {
+                myForm.classList.add("hidden");
+            }
+        });
+    });
+</script>
+
+<!-- Функция удаления расширения -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var extensionElements = document.querySelectorAll(".extension");
+        var deleteButtons = document.querySelectorAll(".delete-extension-button");
+        var confirmDeleteButton = document.getElementById("confirmDeleteExtensionButton");
+        var extensionIdToDelete = null;
+        // Обработка клика по кнопке для удаления
+        extensionElements.forEach(function (extensionElement) {
+            extensionElement.addEventListener("click", function () {
+                extensionIdToDelete = extensionElement.getAttribute("data-extensionid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModal').modal('show');
+            });
+        });
+        // Обработка клика на кнопке "Удалить расширение" и подтверждение удаления
+        deleteButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                extensionIdToDelete = button.getAttribute("data-extensionid");
+                // Открываем модальное окно
+                $('#deleteConfirmationModalExtension').modal('show');
+            });
+        });
+        // Обработка подтверждения удаления
+        confirmDeleteButton.addEventListener("click", function () {
+            if (extensionIdToDelete) {
+                // Выполнить AJAX-запрос на удаление расширения
+                $.ajax({
+                    url: "/Explorer/DeleteExtension",
+                    type: "POST",
+                    data: { id: extensionIdToDelete },
+                    success: function (result) {
+                        location.reload(); // Обновление страницы
+                    },
+                    error: function (error) {
+                        console.error("Ошибка при удалении папки: " + error);
+                    }
+                });
+                $('#deleteConfirmationModalExtension').modal('hide');
+            }
+        });
+    });
+</script>
