@@ -8,7 +8,7 @@
                 <button class="delete-file-button" data-fileid="@files.id">X</button>
                 <button class="download-file-button" data-filename="@files.filename+@files.filetypecode" data-fileid="@files.id">S</button>
                 <!-- Форма переименования файла -->
-                <form asp-action="RenameFolder" asp-controller="Explorer" method="post">
+                <form asp-action="RenameFile" asp-controller="Explorer" method="post">
                     <input type="hidden" name="id" data-fileid="@files.id" value="@files.id" />
                     <input type="text" name="newName" data-fileid="@files.id" placeholder="Новое имя файла" />
                     <button type="submit" id="renameFileButton" data-fileid="@files.id">Обновить имя файла</button>

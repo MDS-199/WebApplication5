@@ -87,11 +87,23 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public IActionResult RenameFolder(int id, string newName)
         {
+
+            bool DoesFolderNameExist(string folderName)
+            {
+                return _context.folders.Any(folder => folder.foldername == folderName);
+            }
+
+            if (DoesFolderNameExist(newName))
+            {
+                TempData["ErrorMessage"] = "Папка с таким именем уже существует.";
+                return RedirectToAction("Index");
+            }
+
             var folder = _context.folders.FirstOrDefault(f => f.id == id);
             if (folder != null)
             {
                 folder.foldername = newName;
-                _context.SaveChanges(); // Сохраните изменения в базе данных
+                _context.SaveChanges(); // Сохрание изменения в базе данных
                 return RedirectToAction("Index"); // Перенаправяет пользователя обратно на страницу списка папок
             }
             else
@@ -180,6 +192,35 @@ namespace WebApplication5.Controllers
             else
             {
                 return NotFound(); // Если файл с указанным id не найден
+            }
+        }
+
+        // Переименование файла
+        [HttpPost]
+        public IActionResult RenameFile(int id, string newName)
+        {
+            bool DoesFileNameExist(string fileName)
+            {
+                return _context.files.Any(file => file.filename == fileName);
+            }
+
+            if (DoesFileNameExist(newName))
+            {
+                TempData["ErrorMessage"] = "Файл с таким именем уже существует.";
+                return RedirectToAction("Index");
+            }
+
+            var file = _context.files.FirstOrDefault(f => f.id == id);
+            if (file != null)
+            {
+                file.filename = newName;
+                _context.SaveChanges(); // Сохранение изменения в базе данных
+                return RedirectToAction("Index"); // Перенаправяет пользователя обратно на страницу списка папок
+            }
+            else
+            {
+                // Если папка с указанным ID не найдена
+                return RedirectToAction("Error"); // Перенаправляет пользователя на страницу с ошибкой
             }
         }
 
